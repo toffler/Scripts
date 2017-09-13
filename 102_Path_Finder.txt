@@ -1,0 +1,24 @@
+//////////////////////////////////////////////////
+//  FileName    :  102_Path_Finder.txt
+//  Comment     :  This script prints all instructions encountered on the way from one address to another
+//  Author      :  atoffler0@gmail.com
+//  Date        :  2017-09-14
+// Instructions :  Paste the script into Script window, pause the debugger and run the script
+//////////////////////////////////////////////////
+
+log "--- begin ---"
+$beg = C0EA81 // address at which a breakpoint will be set
+bc // clear all existing breakpoints
+bphwc
+bp $beg // create a breakpoint at $beg
+
+run // resume the debugger paused before script execution
+
+// next line is reached when breakpoint is hit
+log "--- tracing  ---"
+TraceSetLog "{p:cip} {i:cip}" // custom text to be printed at each stepOver
+tocnd cip == $end, 10 // stepover maximum 0x10 times, stopping if $end address is reached
+
+bc // clear breakpoints
+log "--- end  ---"
+ret // end script

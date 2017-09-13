@@ -1,0 +1,24 @@
+//////////////////////////////////////////////////
+//  FileName    :  101_Breakpoint_With_Output.txt
+//  Comment     :  This script prints registers' values each time a breakpoint is hit
+//  Author      :  atoffler0@gmail.com
+//  Date        :  2017-09-14
+// Instructions :  Paste the script into Script window, pause the debugger and run the script
+//////////////////////////////////////////////////
+
+log "--- begin ---"
+$beg = C0EA81 // address at which a breakpoint will be set
+bc // clear all existing breakpoints
+bphwc
+bp $beg // create a breakpoint at $beg
+bpcnd $beg, $breakpointcounter == 3 // continue from breakpoint 3 times then stop
+SetBreakpointSilent $beg, 1 // don't print standard message when the breakpoint is hit
+SetBreakpointLog $beg, "{d:$breakpointcounter}. EAX:{p:eax} EBX:{p:ebx} ECX:{p:ecx} EDX:{p:edx}" //  custom message to print when the breakpoint is hit
+run // resume the debugger paused before script execution
+
+// next line is reached at $breakpointcounter == 3
+bc // clear breakpoints
+log "--- end  ---"
+ret // end script
+
+// resume the debugger ("Run") if needed
